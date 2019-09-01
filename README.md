@@ -1,4 +1,4 @@
-# Broadcast solution using websockets
+# Broadcasting solution using websockets
 
 This POC upload video chunks from browser using socket.io to a server which converts to a RMTP stream uisng ffmpeg.
 
@@ -16,9 +16,10 @@ Add `RTMP_URL` to enviroment. If you are using a stream service like mux.io url 
 
 `export RTMP_URL=rtmp://live.mux.com/app/STREAM_KEY`
 
-Install dependencies
+## dependencies
 
-`npm install`
+* install ffmpeg
+* Run `npm install`
 
 To run the server.
 
