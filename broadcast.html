@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Broadcast</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
+    <script>
+        var socket = io('http://localhost:3000');
+
+        async function startCapture(displayMediaOptions) {
+            let captureStream = null;
+            try {
+                captureStream = await navigator.mediaDevices.getDisplayMedia(displayMediaOptions);
+                let videoTracks = captureStream.getVideoTracks()
+                let videoElement = document.getElementById("video");
+                videoElement.srcObject = captureStream
+
+                let mediaRecorder = new MediaRecorder(captureStream, {
+                    mimeType: 'video/webm;codecs=h264'
+                });
+                
+                mediaRecorder.ondataavailable = function(event){
+                    socket.emit('video-chunk', event.data);
+                }
+                mediaRecorder.start(5000);
+            } catch(err) {
+                console.error("Error: " + err);
+            }
+            return captureStream;
+        }
+
+        startCapture({
+            cursor: "always",
+            logicalSurface: false
+        });
+    </script>
+</head>
+<body>
+    <video id="video" autoplay></video>
+</body>
+</html>
+
+
